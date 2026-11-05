@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
+const adminRoutes = require("./routes/admin");
 const connectDB = require("./config/database");
 const protect = require("./middleware/auth");
 const adminOnly = require("./middleware/admin");
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
