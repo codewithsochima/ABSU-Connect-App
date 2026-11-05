@@ -5,7 +5,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
 const connectDB = require("./config/database");
-
+const protect = require("./middleware/auth");
+const adminOnly = require("./middleware/admin");
 const app = express();
 
 const PORT = process.env.PORT || 3000;

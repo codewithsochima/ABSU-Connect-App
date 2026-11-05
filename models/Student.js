@@ -32,7 +32,19 @@ const studentSchema = new mongoose.Schema(
 
         level: {
             type: String,
-            enum: ['100','200','300','400','500','600', '']
+            enum: ['100', '200', '300', '400', '500', '600', ''],
+            default: '',
+        },
+
+        profilePicture: {
+            type: String,
+            default: '',
+        },
+
+        role: {
+            type: String,
+            enum: ['student', 'admin'],
+            default: 'student',
         },
     },
     {
@@ -44,6 +56,7 @@ studentSchema.pre('save', async function () {
     if (!this.isModified('password')) {
         return;
     }
+
     this.password = await bcrypt.hash(this.password, 12);
 });
 
