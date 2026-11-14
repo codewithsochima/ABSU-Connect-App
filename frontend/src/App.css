@@ -1,504 +1,431 @@
 
-/* ========================================
-   MAIN PAGE
-======================================== */
-
 .app {
+  --page: #1a1620;
+  --yellow: #f6bf1e;
+  --purple: #8e7fc7;
+  --teal: #43d0c4;
+  --blue: #2f6fd6;
+  --red: #e5445a;
+  --green: #4cb86b;
+  --orange: #f26a2e;
+  --button-blue: #3b9df0;
+  --button-dark: #2c2833;
+
   position: relative;
   min-height: 100vh;
-  width: 100%;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  background-image: url('/images/absu-gate.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: var(--page);
 }
 
-/* Dark overlay over the ABSU gate photograph */
-
-
-.background-overlay {
+.glow {
   position: absolute;
-  inset: 0;
-  z-index: 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(17, 24, 39, 0.78) 0%,
-      rgba(33, 26, 58, 0.65) 48%,
-      rgba(17, 24, 39, 0.48) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(17, 24, 39, 0.35),
-      transparent
-    );
+  top: -20%;
+  left: -15%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  background: radial-gradient(
+    circle,
+    rgba(116, 92, 190, 0.55) 0%,
+    rgba(74, 58, 120, 0.25) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
-/* ========================================
-   NAVIGATION BAR
-======================================== */
+.dot {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.dot-orange {
+  width: 20px;
+  height: 20px;
+  left: 3%;
+  top: 24%;
+  background: var(--orange);
+}
+
+.dot-yellow {
+  width: 18px;
+  height: 18px;
+  right: 12%;
+  top: 5%;
+  background: var(--yellow);
+}
+
+.dot-green {
+  width: 16px;
+  height: 16px;
+  right: 2%;
+  bottom: 14%;
+  background: var(--green);
+}
+
+.dot-red {
+  width: 18px;
+  height: 18px;
+  right: 47%;
+  bottom: 6%;
+  background: var(--red);
+}
 
 .navbar {
   position: relative;
-  z-index: 2;
-
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 28px 6%;
-
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 28px 5%;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-logo {
-  width: 46px;
-  height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid rgba(69, 214, 194, 0.6);
-  border-radius: 12px;
-
-  color: var(--accent);
-  background: rgba(69, 214, 194, 0.1);
-
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.brand-name {
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.nav-actions {
+.logo {
   display: flex;
   align-items: center;
   gap: 14px;
+  color: #fff;
 }
 
-.nav-button {
-  padding: 12px 22px;
-  border-radius: 8px;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  transition: 0.25s ease;
+.logo-mark {
+  width: 46px;
+  height: 52px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 14px rgba(6, 147, 242, 0.35));
 }
 
-.login-button {
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
+.logo-words {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
-.login-button:hover {
-  border-color: var(--accent);
+.logo-text {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
-.signup-button {
-  color: #111827;
-  background: var(--accent);
-}
-
-.signup-button:hover {
-  background: #70ead9;
-  transform: translateY(-2px);
-}
-
-/* ========================================
-   MAIN CONTENT
-======================================== */
-
-.landing-content {
-  position: relative;
-  z-index: 1;
-
-  flex: 1;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  padding: 50px 6% 70px;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 40px;
-}
-
-/* ========================================
-   LEFT SIDE: HERO SECTION
-======================================== */
-
-.hero-section {
-  max-width: 620px;
-}
-
-.hero-label {
-  display: inline-block;
-
-  padding: 10px 16px;
-  margin-bottom: 28px;
-
-  color: var(--accent);
-  background: rgba(69, 214, 194, 0.1);
-  border: 1px solid rgba(69, 214, 194, 0.3);
-  border-radius: 30px;
-
-  font-size: 12px;
-  font-weight: 700;
+.logo-text strong {
+  font-weight: 800;
   letter-spacing: 1px;
 }
 
-.hero-title {
-  margin-bottom: 25px;
-
-  color: white;
-  font-size: clamp(42px, 5vw, 68px);
-  line-height: 1.12;
-  letter-spacing: -2px;
+.logo-motto {
+  margin-top: 3px;
+  color: #d4b196;
+  font-size: 12px;
+  letter-spacing: 0.4px;
 }
 
-.hero-highlight {
-  color: var(--accent);
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-62%);
+  display: flex;
+  gap: 40px;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--yellow);
+}
+
+.signin-button {
+  padding: 10px 28px;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #1a1620;
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.signin-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.hero {
+  min-height: calc(100vh - 100px);
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  width: 50%;
+  max-width: 600px;
+  padding-bottom: 40px;
+}
+
+.hero-text h1 {
+  color: #fff;
+  font-size: clamp(36px, 4.6vw, 62px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -1px;
 }
 
 .hero-description {
-  max-width: 530px;
-
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 17px;
-  line-height: 1.9;
+  max-width: 460px;
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 15px;
+  line-height: 1.7;
 }
 
 .hero-actions {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-
-  margin-top: 36px;
+  margin-top: 28px;
 }
 
-.hero-button {
-  padding: 15px 23px;
-  border-radius: 9px;
-
+.btn {
+  padding: 13px 38px;
+  border-radius: 999px;
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
-
-  transition: 0.25s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.primary-button {
-  color: #111827;
-  background: var(--accent);
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
 }
 
-.primary-button span {
-  margin-left: 10px;
+.btn-blue {
+  background: var(--button-blue);
+}
+
+.btn-dark {
+  background: var(--button-dark);
+}
+
+.categories {
+  margin-top: 70px;
+}
+
+.categories h2 {
+  color: #fff;
   font-size: 18px;
+  font-weight: 600;
 }
 
-.primary-button:hover {
-  background: #70ead9;
-  transform: translateY(-3px);
-}
-
-.secondary-button {
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.secondary-button:hover {
-  border-color: var(--accent);
-}
-
-.hero-note {
+.categories ul {
   display: flex;
-  align-items: center;
-  gap: 10px;
-
-  margin-top: 38px;
-
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 13px;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.online-dot {
-  width: 9px;
-  height: 9px;
-
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
+.categories a {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  transition: color 0.2s ease;
 }
 
-/* ========================================
-   RIGHT SIDE: STUDENT PHOTO GALLERY
-======================================== */
+.categories a:hover {
+  color: var(--yellow);
+}
 
-.student-gallery {
-  position: relative;
-
-  min-height: 540px;
-  width: 100%;
-
+.gallery {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44%;
+  padding: 0 4% 0 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: center;
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  z-index: 2;
 }
 
-.student-photo {
-  position: relative;
+.gallery-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-  height: 340px;
+.col-1 {
+  margin-top: 80px;
+}
+
+.col-2 {
+  margin-top: 10px;
+}
+
+.col-3 {
+  margin-top: 110px;
+}
+
+.pill {
+  height: max(190px, calc((100vh - 110px - 16px - 30px) / 2));
+  border-radius: 999px;
   overflow: hidden;
-
-  border: 2px solid rgba(255, 255, 255, 0.18);
-  border-radius: 100px;
-
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-
-  transition: transform 0.35s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
-.student-photo:hover {
-  transform: translateY(-10px);
-  border-color: var(--accent);
+.pill:hover {
+  transform: translateY(-8px);
 }
 
-.student-photo img {
+.pill img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-  object-position: center;
-
-  display: block;
+  object-position: center top;
 }
 
-/* Different portrait heights */
-
-.photo-one {
-  height: 390px;
-  transform: translateY(20px);
+.pill-yellow {
+  background: var(--yellow);
 }
 
-.photo-two {
-  height: 310px;
-  transform: translateY(-65px);
+.pill-purple {
+  background: var(--purple);
 }
 
-.photo-three {
-  height: 360px;
-  transform: translateY(55px);
+.pill-teal {
+  background: var(--teal);
 }
 
-.photo-four {
-  height: 400px;
-  transform: translateY(-25px);
+.pill-blue {
+  background: var(--blue);
 }
 
-/* Gallery caption */
-
-.gallery-caption {
-  position: absolute;
-  bottom: -15px;
-  right: 0;
-
-  padding: 16px 22px;
-
-  background: rgba(17, 24, 39, 0.8);
-  border: 1px solid rgba(69, 214, 194, 0.3);
-  border-radius: 12px;
-
-  backdrop-filter: blur(12px);
+.pill-red {
+  background: var(--red);
 }
 
-.gallery-caption span {
-  color: var(--accent);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
+.pill-green {
+  background: var(--green);
 }
-
-.gallery-caption p {
-  margin-top: 5px;
-  color: white;
-  font-size: 13px;
-}
-
-/* ========================================
-   FOOTER
-======================================== */
-
-.footer {
-  position: relative;
-  z-index: 1;
-
-  width: 100%;
-  padding: 20px;
-
-  color: rgba(255, 255, 255, 0.6);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-  font-size: 12px;
-  text-align: center;
-}
-
-/* ========================================
-   TABLET RESPONSIVENESS
-======================================== */
 
 @media (max-width: 1000px) {
-  .landing-content {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding-top: 55px;
+  .nav-links {
+    display: none;
   }
 
-  .hero-section {
-    max-width: 750px;
+  .hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 60px;
   }
 
-  .student-gallery {
-    max-width: 650px;
+  .hero-text {
+    width: 100%;
+    max-width: none;
+    padding-top: 30px;
+  }
+
+  .categories {
+    margin-top: 40px;
+  }
+
+  .gallery {
+    position: static;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
     margin: 20px auto 0;
+    padding: 0;
+  }
+
+  .col-1,
+  .col-3 {
+    margin-top: 30px;
+  }
+
+  .col-2 {
+    margin-top: -30px;
+  }
+
+  .pill {
+    height: 260px;
+  }
+
+  .dot-red,
+  .dot-green {
+    display: none;
   }
 }
-
-/* ========================================
-   MOBILE RESPONSIVENESS
-======================================== */
 
 @media (max-width: 600px) {
   .navbar {
     padding: 20px;
   }
 
-  .brand-logo {
-    width: 38px;
+  .logo {
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 34px;
     height: 38px;
   }
 
-  .brand-name {
-    font-size: 16px;
+  .logo-text {
+    font-size: 17px;
   }
 
-  .nav-actions {
-    gap: 7px;
+  .logo-motto {
+    font-size: 10px;
   }
 
-  .nav-button {
-    padding: 10px 12px;
-    font-size: 11px;
+  .signin-button {
+    padding: 9px 20px;
   }
 
-  .landing-content {
-    padding: 55px 22px 50px;
-    gap: 30px;
-  }
-
-  .hero-title {
-    font-size: clamp(38px, 10vw, 52px);
-    letter-spacing: -1.5px;
-  }
-
-  .hero-description {
-    font-size: 15px;
-    line-height: 1.8;
+  .hero {
+    padding: 0 20px 50px;
   }
 
   .hero-actions {
     flex-direction: column;
-    align-items: stretch;
   }
 
-  .hero-button {
+  .btn {
     width: 100%;
     text-align: center;
   }
 
-  .student-gallery {
-    min-height: 340px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 7px;
+  .gallery {
+    gap: 8px;
   }
 
-  .student-photo {
-    height: 220px;
-    border-radius: 55px;
+  .gallery-col {
+    gap: 8px;
   }
 
-  .photo-one {
-    height: 260px;
-    transform: translateY(15px);
+  .pill {
+    height: 190px;
   }
 
-  .photo-two {
-    height: 200px;
-    transform: translateY(-25px);
-  }
-
-  .photo-three {
-    height: 235px;
-    transform: translateY(25px);
-  }
-
-  .photo-four {
-    height: 260px;
-    transform: translateY(-15px);
-  }
-
-  .gallery-caption {
-    bottom: -5px;
-    right: 0;
-    padding: 12px 15px;
+  .dot-orange {
+    top: 11%;
   }
 }
 
-/* Very small phones */
-
-@media (max-width: 380px) {
-  .brand-name {
-    font-size: 14px;
-  }
-
-  .brand {
-    gap: 7px;
-  }
-
-  .nav-button {
-    padding: 9px;
-  }
-
-  .student-gallery {
-    gap: 5px;
-  }
-
-  .student-photo {
-    border-width: 1px;
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .btn,
+  .signin-button {
+    transition: none;
   }
 }
