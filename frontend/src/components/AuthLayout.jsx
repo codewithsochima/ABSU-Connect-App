@@ -5,7 +5,6 @@ import Logo from '../Logo'
 import { ArrowLeftIcon } from './icons'
 import '../auth.css'
 
-const PANEL_TAG = 'An independent student project'
 const STEPS = ['Create your account', 'Set up your profile', 'Join your community']
 
 function AuthLayout({ pageTitle, headline, description, activeStep = null, children }) {
@@ -30,26 +29,24 @@ function AuthLayout({ pageTitle, headline, description, activeStep = null, child
           </div>
 
           <div className="panel-copy">
-            <span className="panel-tag">
-              <span className="panel-tag-dot" aria-hidden="true"></span>
-              {PANEL_TAG}
-            </span>
             <p className="panel-title">{headline}</p>
             <p className="panel-text">{description}</p>
           </div>
 
-          <ol className="steps" aria-label="Your journey">
-            {STEPS.map((title, index) => (
-              <li
-                key={title}
-                className={`step${activeStep === index ? ' is-active' : ''}`}
-                aria-current={activeStep === index ? 'step' : undefined}
-              >
-                <span className="step-num" aria-hidden="true">{index + 1}</span>
-                <span className="step-title">{title}</span>
-              </li>
-            ))}
-          </ol>
+          {activeStep !== null && (
+            <ol className="steps" aria-label="Your journey">
+              {STEPS.map((title, index) => (
+                <li
+                  key={title}
+                  className={`step${activeStep === index ? ' is-active' : ''}`}
+                  aria-current={activeStep === index ? 'step' : undefined}
+                >
+                  <span className="step-num" aria-hidden="true">{index + 1}</span>
+                  <span className="step-title">{title}</span>
+                </li>
+              ))}
+            </ol>
+          )}
         </aside>
 
         <main className="auth-main">
