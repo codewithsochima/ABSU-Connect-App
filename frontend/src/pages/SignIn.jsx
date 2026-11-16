@@ -1,12 +1,11 @@
 
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/AuthLayout'
-import AuthSuccess from '../components/AuthSuccess'
 import PasswordField from '../components/PasswordField'
 import TextField from '../components/TextField'
 import { loginStudent } from '../api'
-import { forgetEmail, getRememberedEmail, rememberEmail, saveToken } from '../authStorage'
+import { forgetEmail, getRememberedEmail, getToken, rememberEmail, saveToken } from '../authStorage'
 import { validateSignIn } from '../validation'
 
 const COPY = {
@@ -22,7 +21,16 @@ const COPY = {
   forgotNote: "Password recovery isn't available yet.",
   switchText: "Don't have an account?",
   switchLink: 'Sign up',
-  successNote: "ABSU Connect hasn't launched yet, so there's no member area to open. We're still building it.",
+  sessionError:
+    "We couldn't start your session on this device. Please check that your browser allows session storage, then try again.",
+}
+
+// Messages shown when another page sends the student here (via navigate state).
+const NOTICES = {
+  'session-expired': 'Your session has expired. Please sign in again.',
+  'account-unavailable':
+    "We couldn't find your account. It may no longer be available. Please sign in again or create a new account.",
+  registered: 'Your account was created. Please sign in to continue.',
 }
 
 const FIELD_IDS = {
@@ -31,15 +39,16 @@ const FIELD_IDS = {
 }
 
 function SignIn() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [rememberedEmail] = useState(getRememberedEmail)
   const [values, setValues] = useState({ email: rememberedEmail, password: '' })
   const [rememberMe, setRememberMe] = useState(Boolean(rememberedEmail))
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
+  const [notice, setNotice] = useState(() => NOTICES[location.state?.reason] || '')
   const [showForgotNote, setShowForgotNote] = useState(false)
   const [status, setStatus] = useState('idle')
-  const [welcomeName, setWelcomeName] = useState('')
-  const [serverMessage, setServerMessage] = useState('')
 
   const isLoading = status === 'loading'
 
@@ -56,6 +65,7 @@ function SignIn() {
     const foundErrors = validateSignIn(values)
     setErrors(foundErrors)
     setFormError('')
+    setNotice('')
 
     const firstInvalid = Object.keys(FIELD_IDS).find((name) => foundErrors[name])
     if (firstInvalid) {
@@ -69,14 +79,28 @@ function SignIn() {
       const email = values.email.trim()
       const data = await loginStudent({ email, password: values.password })
 
-      saveToken(data.token)
+      // Only continue if the token was really returned AND saved.
+      let tokenSaved = false
+      try {
+        if (data?.token) {
+          saveToken(data.token)
+          tokenSaved = getToken() === data.token
+        }
+      } catch {
+        tokenSaved = false
+      }
+
+      if (!tokenSaved) {
+        setFormError(COPY.sessionError)
+        setStatus('idle')
+        return
+      }
+
       if (rememberMe) rememberEmail(email)
       else forgetEmail()
 
-      setWelcomeName(data.student?.fullName?.split(' ')[0] || '')
-      setServerMessage(data.message)
       setValues({ email: '', password: '' })
-      setStatus('success')
+      navigate('/dashboard', { replace: true })
     } catch (error) {
       setFormError(error.message)
       setStatus('idle')
@@ -89,83 +113,77 @@ function SignIn() {
       headline={COPY.headline}
       description={COPY.description}
     >
-      {status === 'success' ? (
-        <AuthSuccess
-          title={welcomeName ? `Signed in, ${welcomeName}.` : 'Signed in.'}
-          message={serverMessage}
-          note={COPY.successNote}
-        />
-      ) : (
-        <form className="form" onSubmit={handleSubmit} noValidate aria-busy={isLoading}>
-          <header className="form-head">
-            <h1 className="form-title">{COPY.title}</h1>
-            <p className="form-sub">{COPY.subtitle}</p>
-          </header>
+      <form className="form" onSubmit={handleSubmit} noValidate aria-busy={isLoading}>
+        <header className="form-head">
+          <h1 className="form-title">{COPY.title}</h1>
+          <p className="form-sub">{COPY.subtitle}</p>
+        </header>
 
-          <div className="form-fields">
-            <TextField
-              id={FIELD_IDS.email}
-              name="email"
-              label="Email address"
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              placeholder="name@example.com"
-              value={values.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
+        <div className="form-fields">
+          {notice && <p className="form-note" role="status">{notice}</p>}
 
-            <PasswordField
-              id={FIELD_IDS.password}
-              name="password"
-              label="Password"
-              autoComplete="current-password"
-              placeholder="Your password"
-              value={values.password}
-              onChange={handleChange}
-              error={errors.password}
-            />
+          <TextField
+            id={FIELD_IDS.email}
+            name="email"
+            label="Email address"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            placeholder="name@example.com"
+            value={values.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
 
-            <div className="form-meta">
-              <label className="check">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(event) => setRememberMe(event.target.checked)}
-                />
-                <span className="check-box" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="auth-icon">
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-                </span>
-                {COPY.rememberLabel}
-              </label>
-              <button
-                type="button"
-                className="link-button"
-                aria-expanded={showForgotNote}
-                onClick={() => setShowForgotNote((current) => !current)}
-              >
-                {COPY.forgotLabel}
-              </button>
-            </div>
+          <PasswordField
+            id={FIELD_IDS.password}
+            name="password"
+            label="Password"
+            autoComplete="current-password"
+            placeholder="Your password"
+            value={values.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
 
-            {showForgotNote && <p className="form-note" role="status">{COPY.forgotNote}</p>}
-
-            {formError && <p className="form-alert" role="alert">{formError}</p>}
-
-            <button type="submit" className="submit" disabled={isLoading}>
-              {isLoading && <span className="spinner" aria-hidden="true"></span>}
-              {isLoading ? COPY.submitting : COPY.submit}
+          <div className="form-meta">
+            <label className="check">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(event) => setRememberMe(event.target.checked)}
+              />
+              <span className="check-box" aria-hidden="true">
+                <svg viewBox="0 0 24 24" className="auth-icon">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </span>
+              {COPY.rememberLabel}
+            </label>
+            <button
+              type="button"
+              className="link-button"
+              aria-expanded={showForgotNote}
+              onClick={() => setShowForgotNote((current) => !current)}
+            >
+              {COPY.forgotLabel}
             </button>
           </div>
 
-          <p className="switch-line">
-            {COPY.switchText} <Link to="/signup">{COPY.switchLink}</Link>
-          </p>
-        </form>
-      )}
+          {showForgotNote && <p className="form-note" role="status">{COPY.forgotNote}</p>}
+
+          {formError && <p className="form-alert" role="alert">{formError}</p>}
+
+          <button type="submit" className="submit" disabled={isLoading}>
+            {isLoading && <span className="spinner" aria-hidden="true"></span>}
+            {isLoading ? COPY.submitting : COPY.submit}
+          </button>
+        </div>
+
+        <p className="switch-line">
+          {COPY.switchText} <Link to="/signup">{COPY.switchLink}</Link>
+        </p>
+      </form>
     </AuthLayout>
   )
 }
